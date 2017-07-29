@@ -3,16 +3,20 @@ import time
 import json
 from slackclient import SlackClient
 
+import tweet_handler
 
 BOT_ID = "U6FGNSVHA"
 
 AT_BOT = "<@" + BOT_ID + ">"
 
-slack_client = SlackClient("xoxb-219566913588-zcnsqtsprs4MLjAJneSBW1Tn")
+slack_client = SlackClient("xoxb-219566913588-zZH2pR0BkLh0quDK3EJwEHGB")
 
 def handle_command(command, channel, user):
     if(command=="test"):
         slack_client.api_call("chat.postMessage", channel=channel, text="tested", as_user=True)
+    elif(command=="!trump"):
+        to_post = tweet_handler.trump_tweet()
+        slack_client.api_call("chat.postMessage", channel=channel, text=to_post, as_user=True)
 
 def parse_slack_output(slack_rtm_output):
     """
@@ -34,12 +38,13 @@ if __name__ == "__main__":
     if slack_client.rtm_connect():
         print("StarterBot connected and running!")
         while True:
-            stuff = parse_slack_output(slack_client.rtm_read())
+            read_output = slack_client.rtm_read()
+            stuff = parse_slack_output(read_output)
             if stuff[0] and stuff[1] and stuff[2]:
                 print(stuff[0])
                 print(stuff[1])
                 print(stuff[2])
                 handle_command(stuff[0], stuff[1], stuff[2])
-            time.sleep(READ_WEBSOCKET_DELAY)
+            # time.sleep(READ_WEBSOCKET_DELAY)
     else:
         print("Connection failed. Invalid Slack token or bot ID?")

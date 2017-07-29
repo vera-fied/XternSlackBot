@@ -18,3 +18,5 @@ if __name__ == "__main__":
                 print("Bot ID for '" + user['name'] + "' is " + user.get('id'))
     else:
         print("could not find bot user with the name " + BOT_NAME)
+        print(slack_token)
+        print(api_call)
