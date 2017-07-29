@@ -4,11 +4,11 @@ import json
 from slackclient import SlackClient
 
 
-BOT_ID = os.environ.get("BOT_ID")
+BOT_ID = "U6FGNSVHA"
 
 AT_BOT = "<@" + BOT_ID + ">"
 
-slack_client = SlackClient(os.environ.get('SLACK_BOT_TOKEN'))
+slack_client = SlackClient("xoxb-219566913588-zcnsqtsprs4MLjAJneSBW1Tn")
 
 def handle_command(command, channel, user):
     if(command=="test"):

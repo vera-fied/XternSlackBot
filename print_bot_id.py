@@ -1,8 +1,9 @@
 """TEST FOR BOT"""
 import os
+
 from slackclient import SlackClient
 
-BOT_NAME = 'fred'
+BOT_NAME = 'urmumxxx123'
 
 slack_token = os.environ["SLACK_API_TOKEN"]
 slack_client = SlackClient(slack_token)
