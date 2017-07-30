@@ -6,11 +6,11 @@ from slackclient import SlackClient
 import tweet_handler
 import reddit_handler
 
-BOT_ID = "U6FGNSVHA"
+BOT_ID = os.environ.get("BOT_ID")
 
 AT_BOT = "<@" + BOT_ID + ">"
 
-slack_client = SlackClient("xoxb-219566913588-zZH2pR0BkLh0quDK3EJwEHGB")
+slack_client = SlackClient(os.environ.get('SLACK_API_TOKEN'))
 
 def handle_command(command, channel, user):
     if(command=="test"):
