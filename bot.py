@@ -37,7 +37,7 @@ def parse_slack_output(slack_rtm_output):
 				if AT_BOT in output['text']:
 					# return text after the @ mention, whitespace removed
 					return output['text'].split(AT_BOT)[1].strip().lower(), output['channel'], output['user'], output['ts']
-				else:
+				elif "@" in output['text'] and ":pizza:" in output['text']:
 					return output['text'].strip().lower(), output['channel'], output['user'], output['ts']
 	return None, None
 
