@@ -3,8 +3,7 @@ import time
 import json
 from slackclient import SlackClient
 
-import tweet_handler
-import reddit_handler
+import external_api_router
 
 BOT_ID = os.environ.get("BOT_ID")
 
@@ -13,20 +12,7 @@ AT_BOT = "<@" + BOT_ID + ">"
 slack_client = SlackClient(os.environ.get('SLACK_API_TOKEN'))
 
 def handle_command(command, channel, user):
-    if(command=="test"):
-        slack_client.api_call("chat.postMessage", channel=channel, text="tested", as_user=True)
-    elif(command=="!trump"):
-        to_post = tweet_handler.trump_tweet()
-        slack_client.api_call("chat.postMessage", channel=channel, text=to_post, as_user=True)
-    elif(command=="!puppy"):
-        to_post = reddit_handler.random_puppy()
-        slack_client.api_call("chat.postMessage", channel=channel, text=to_post, as_user=True, unfurl_media=True)
-    elif(command=="!kitten"):
-        to_post = reddit_handler.random_kitten()
-        slack_client.api_call("chat.postMessage", channel=channel, text=to_post, as_user=True, unfurl_media=True)
-    elif(command=="!cute"):
-        to_post = reddit_handler.random_cute()
-        slack_client.api_call("chat.postMessage", channel=channel, text=to_post, as_user=True, unfurl_media=True)
+    external_api_router.handle_message(command, channel, user)
 
 def parse_slack_output(slack_rtm_output):
     """

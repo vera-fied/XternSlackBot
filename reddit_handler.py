@@ -49,7 +49,5 @@ def random_cute():
         out = get_subreddit_content('aww', "I choked on cuteness, try again!")
     return out
 
-
-
 if __name__ == '__main__':
   random_puppy()
