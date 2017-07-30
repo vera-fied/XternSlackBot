@@ -1,4 +1,5 @@
 import praw
+import random
 import os
 from dotenv import load_dotenv, find_dotenv
 
@@ -45,6 +46,14 @@ def random_cute():
     while out == None:
         out = get_subreddit_content('aww', "I choked on cuteness, try again!")
     return out
+
+def random_sfw():
+    subreddit_name = random.choice(['FoodPorn', 'DesserPorn', 'EarthPorn', 'FirePorn', 'WeatherPorn'])
+    out = None
+    while out == None:
+        out = get_subreddit_content(subreddit_name, "I choked on cuteness, try again!")
+    return out
+
 
 if __name__ == '__main__':
   random_puppy()

@@ -20,7 +20,10 @@ def db_get(long_key, prop):
 	elif prop is None:
 		return res
 	else:
-		return res[prop]
+		try:
+			return res[prop]
+		except KeyError:
+			return None
 
 
 def db_set(long_key, value):

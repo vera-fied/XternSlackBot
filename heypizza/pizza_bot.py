@@ -12,10 +12,10 @@ def handle_message(slack_client, message, channel, user):
 
 	if 'leaderboard' in message:
 		send_message(channel, leaderboards())
-		return
+		return ""
 
 	if ':pizza:' not in message:
-		return
+		return None
 
 	pizzas = parse_message(message)
 	user_name = get_user(user)['name']
@@ -27,6 +27,7 @@ def handle_message(slack_client, message, channel, user):
 		text = make_error_message(pizzas, user_name)
 
 	send_message(channel, text)
+	return ""
 
 
 def verify_pizzas(pizzas, user):
