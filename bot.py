@@ -2,7 +2,7 @@ import os
 import time
 import json
 from slackclient import SlackClient
-import external_api_router
+from external_apis import external_api_router
 from scrabblebot import scrabblebot
 
 BOT_ID = os.environ.get("BOT_ID")
@@ -17,7 +17,7 @@ if(adminid):
 
 def handle_command(command, channel, senduser, ts):
     scrabblebot.handle_command(command, channel, senduser, ts, slack_client, admin, adminid)
-    external_api_router.handle_message(command, channel, user)
+    external_api_router.handle_message(command, channel, senduser, slack_client)
 
 def parse_slack_output(slack_rtm_output):
     """

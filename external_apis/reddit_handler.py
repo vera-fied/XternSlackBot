@@ -1,14 +1,15 @@
 import praw
+import os
+from dotenv import load_dotenv, find_dotenv
+
+load_dotenv(find_dotenv())
+
+client_id = os.environ.get('REDDIT_PUBLIC_KEY')
+client_secret = os.environ.get('REDDIT_PUBLIC_SECRET')
+username = os.environ.get('REDDIT_USERNAME')
+password = os.environ.get('REDDIT_PASSWORD')
 
 def get_subreddit_content(subreddit_name, error_msg):
-    with open(".env") as f:
-        content = f.readlines()
-
-    client_id = (content[4].split("="))[1].strip('\n')
-    client_secret = (content[5].split("="))[1].strip('\n')
-    username = (content[6].split("="))[1].strip('\n')
-    password = (content[7].split("="))[1].strip('\n')
-
     try:
         reddit_inst = praw.Reddit(client_id=client_id,
                             client_secret=client_secret,

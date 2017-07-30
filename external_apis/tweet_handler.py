@@ -1,15 +1,16 @@
-import tweepy
 import random
+import os
+import tweepy
+from dotenv import load_dotenv, find_dotenv
+
+load_dotenv(find_dotenv())
+
+consumer_key = os.environ.get('TWITTER_CONSUMER_KEY')
+consumer_secret = os.environ.get('TWITTER_CONSUMER_SECRET')
+token_key = os.environ.get('TWITTER_TOKEN_KEY')
+token_secret = os.environ.get('TWITTER_TOKEN_SECRET')
 
 def trump_tweet():
-    with open(".env") as f:
-        content = f.readlines()
-
-    consumer_key = (content[0].split("="))[1].strip('\n')
-    consumer_secret = (content[1].split("="))[1].strip('\n')
-    token_key = (content[2].split("="))[1].strip('\n')
-    token_secret = (content[3].split("="))[1].strip('\n')
-    
     try:
         auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
         auth.set_access_token(token_key, token_secret)
