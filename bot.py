@@ -3,6 +3,7 @@ import time
 from slackclient import SlackClient
 from external_apis import external_api_router
 from scrabblebot import scrabblebot
+from oyapls import oyapls
 
 from dotenv import load_dotenv, find_dotenv
 from heypizza import pizza_bot
@@ -21,7 +22,8 @@ def handle_command(command, channel, send_user, ts):
     result_scrabble = scrabblebot.handle_command(command, channel, send_user, ts, slack_client, admin, admin_id)
     result_external = external_api_router.handle_message(command, channel, send_user, slack_client)
     result_pizza = pizza_bot.handle_message(slack_client, command, channel, user=send_user)
-    if result_scrabble == None and result_external == None and result_pizza == None:
+    result_oya = oyapls.handle_message(slack_client, command, channel, send_user)
+    if result_scrabble == None and result_external == None and result_pizza == None and result_oya == None:
         display_help(command, channel, send_user)
 
 def parse_slack_output(slack_rtm_output):
@@ -34,11 +36,10 @@ def parse_slack_output(slack_rtm_output):
     if output_list and len(output_list) > 0:
         for output in output_list:
             if output and 'text' in output and 'user' in output:
-                print(output)
                 if AT_BOT in output['text']:
                     # return text after the @ mention, whitespace removed
                     return output['text'].split(AT_BOT)[1].strip().lower(), output['channel'], output['user'], output['ts']
-                elif "@" in output['text'] and ":pizza:" in output['text']:
+                elif "@" in output['text'] and (":pizza:" in output['text'] or ":oya" in output['text'] or ":nsfw_oya:" in output['text']):
                     return output['text'].strip().lower(), output['channel'], output['user'], output['ts']
     return None, None
 
