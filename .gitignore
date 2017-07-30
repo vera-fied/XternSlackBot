@@ -4,3 +4,4 @@ conf.py
 *.env
 .idea
 *.swp
+*.pyc
