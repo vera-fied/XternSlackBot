@@ -33,8 +33,12 @@ def parse_slack_output(slack_rtm_output):
 	if output_list and len(output_list) > 0:
 		for output in output_list:
 			if output and 'text' in output:
-				# return text after the @ mention, whitespace removed
-				return output['text'].split(AT_BOT)[1].strip().lower(), output['channel'], output['user'], output['ts']
+				print(output)
+				if AT_BOT in output['text']:
+					# return text after the @ mention, whitespace removed
+					return output['text'].split(AT_BOT)[1].strip().lower(), output['channel'], output['user'], output['ts']
+				else:
+					return output['text'].strip().lower(), output['channel'], output['user'], output['ts']
 	return None, None
 
 
@@ -43,7 +47,8 @@ if __name__ == "__main__":
 	if slack_client.rtm_connect():
 		print("StarterBot connected and running!")
 		while True:
-			stuff = parse_slack_output(slack_client.rtm_read())
+			read_output = slack_client.rtm_read()
+			stuff = parse_slack_output(read_output)
 			if stuff[0] and stuff[1] and stuff[2] and stuff[3]:
 				handle_command(stuff[0], stuff[1], stuff[2], stuff[3])
 			time.sleep(READ_WEBSOCKET_DELAY)
