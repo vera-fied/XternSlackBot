@@ -17,3 +17,6 @@ def handle_message(command, channel, user, slack_client):
     elif(command=="!cute"):
         to_post = reddit_handler.random_cute()
         slack_client.api_call("chat.postMessage", channel=channel, text=to_post, as_user=True, unfurl_media=True)
+    elif(command=="!love"):
+        to_post = reddit_handler.random_sfw()
+        slack_client.api_call("chat.postMessage", channel=channel, text=to_post, as_user=True, unfurl_media=True)
