@@ -54,7 +54,7 @@ def display_help(command, channel, send_user):
                 "\t@user_to_check oyas - gives info on how many oyas it has.\n"
                 "\t@user_to_gift #ofOyas :oyatype: ... - gift oyas to another user\n"
                 "OTHER FEATURES\n" +
-                "\tscrabblify - get Trump's most recent tweet\n" +
+                "\tscrabblify - change text to scrabble tiles\n" +
                 "\t!trump - get Trump's most recent tweet\n" +
                 "\t!puppy - get a random picture from reddit.com/r/puppies\n" + 
                 "\t!kitten - get a random picture from reddit.com/r/kittens\n" +
