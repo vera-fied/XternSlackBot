@@ -49,6 +49,10 @@ def display_help(command, channel, send_user):
                 "\tTacoBot is back with a new face!\n" 
                 "\t@user_to_gift :pizza: - gives designated user a pizza\n" +
                 "\tleaderboard - displays the users with the highest pizza totals\n" 
+                "OYA PLS\n" +
+                "\toyapls - gives the user a random oya, up to 3 a day.\n" +
+                "\t@user_to_check oyas - gives info on how many oyas it has.\n"
+                "\t@user_to_gift #ofOyas :oyatype: ... - gift oyas to another user\n"
                 "OTHER FEATURES\n" +
                 "\tscrabblify - get Trump's most recent tweet\n" +
                 "\t!trump - get Trump's most recent tweet\n" +
