@@ -88,10 +88,10 @@ def give_oya(oya, user, slack_client, channel):
     name = get_user(user, slack_client).get('name')
 
     oyas_left = None
-    if 'daily_oyas' in vals.keys():
+    if (vals != None and 'daily_oyas' in vals.keys()):
         oyas_left = vals['daily_oyas']
     last_date = None
-    if 'last_date' in vals.keys():
+    if (vals != None and 'last_date' in vals.keys()):
         last_date = vals['last_date']
 
     if (last_date is None or (date.today() - date.fromordinal(last_date)).days > 0 or oyas_left is None):
@@ -100,7 +100,7 @@ def give_oya(oya, user, slack_client, channel):
         slack_client.api_call('chat.postMessage', channel=channel, text = name.title() + " has already gotten 3 oyas today.", as_user=True)
         return
 
-    if oya in vals.keys():
+    if (vals != None and oya in vals.keys()):
         old_oyas = vals[oya] 
     else:
         old_oyas = 0
