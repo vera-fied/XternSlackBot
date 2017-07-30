@@ -1,3 +1,5 @@
 rtmbot.conf
 rtmbot.log
+conf.py
+*.env
 *.swp

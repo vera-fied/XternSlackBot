@@ -2,6 +2,7 @@ import os
 import time
 import json
 from slackclient import SlackClient
+import external_api_router
 from scrabblebot import scrabblebot
 
 BOT_ID = os.environ.get("BOT_ID")
@@ -10,11 +11,13 @@ AT_BOT = "<@" + BOT_ID + ">"
 adminid = os.environ.get('ADMIN_TOKEN')
 
 slack_client = SlackClient(os.environ.get('SLACK_API_TOKEN'))
+
 if(adminid):
     admin = SlackClient(adminid)
 
 def handle_command(command, channel, senduser, ts):
     scrabblebot.handle_command(command, channel, senduser, ts, slack_client, admin, adminid)
+    external_api_router.handle_message(command, channel, user)
 
 def parse_slack_output(slack_rtm_output):
     """
@@ -35,7 +38,8 @@ if __name__ == "__main__":
     if slack_client.rtm_connect():
         print("StarterBot connected and running!")
         while True:
-            stuff = parse_slack_output(slack_client.rtm_read())
+            read_output = slack_client.rtm_read()
+            stuff = parse_slack_output(read_output)
             if stuff[0] and stuff[1] and stuff[2]:
                 print(stuff[0])
                 print(stuff[1])

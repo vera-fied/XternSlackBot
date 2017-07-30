@@ -1,8 +1,9 @@
 """TEST FOR BOT"""
 import os
+
 from slackclient import SlackClient
 
-BOT_NAME = 'fred'
+BOT_NAME = 'urmumxxx123'
 
 slack_token = os.environ["SLACK_API_TOKEN"]
 slack_client = SlackClient(slack_token)
@@ -17,3 +18,5 @@ if __name__ == "__main__":
                 print("Bot ID for '" + user['name'] + "' is " + user.get('id'))
     else:
         print("could not find bot user with the name " + BOT_NAME)
+        print(slack_token)
+        print(api_call)
