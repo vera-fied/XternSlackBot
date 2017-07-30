@@ -21,4 +21,7 @@ def handle_command(command, channel, senduser, ts, slack_client, admin_client, a
         else:
             print("Cannot delete message, not an admin")
         slack_client.api_call("chat.postMessage", channel=channel, text=output, as_user=False, username=name, icon_url=url)
+        return ""
+    else:
+        return None
 

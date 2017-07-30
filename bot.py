@@ -18,10 +18,11 @@ if admin_id:
 
 
 def handle_command(command, channel, send_user, ts):
-    scrabblebot.handle_command(command, channel, send_user, ts, slack_client, admin, admin_id)
-    external_api_router.handle_message(command, channel, send_user, slack_client)
-    pizza_bot.handle_message(slack_client, command, channel, user=send_user)
-
+    result_scrabble = scrabblebot.handle_command(command, channel, send_user, ts, slack_client, admin, admin_id)
+    result_external = external_api_router.handle_message(command, channel, send_user, slack_client)
+    result_pizza = pizza_bot.handle_message(slack_client, command, channel, user=send_user)
+    if result_scrabble == None and result_external == None and result_pizza == None:
+        display_help(command, channel, send_user)
 
 def parse_slack_output(slack_rtm_output):
     """
@@ -32,7 +33,7 @@ def parse_slack_output(slack_rtm_output):
     output_list = slack_rtm_output
     if output_list and len(output_list) > 0:
         for output in output_list:
-            if output and 'text' in output:
+            if output and 'text' in output and 'user' in output:
                 print(output)
                 if AT_BOT in output['text']:
                     # return text after the @ mention, whitespace removed
@@ -40,6 +41,23 @@ def parse_slack_output(slack_rtm_output):
                 elif "@" in output['text'] and ":pizza:" in output['text']:
                     return output['text'].strip().lower(), output['channel'], output['user'], output['ts']
     return None, None
+
+def display_help(command, channel, send_user):
+    message = ("```" + 
+                "PIZZA BOT\n" +
+                "\tTacoBot is back with a new face!\n" 
+                "\t@user_to_gift :pizza: - gives designated user a pizza\n" +
+                "\tleaderboard - displays the users with the highest pizza totals\n" 
+                "OTHER FEATURES\n" +
+                "\tscrabblify - get Trump's most recent tweet\n" +
+                "\t!trump - get Trump's most recent tweet\n" +
+                "\t!puppy - get a random picture from reddit.com/r/puppies\n" + 
+                "\t!kitten - get a random picture from reddit.com/r/kittens\n" +
+                "\t!cute - get a random picture from reddit.com/r/aww\n" + 
+                "\t!love - get a random scenic picture from one of various subreddits\n" +
+                "```"
+                )
+    slack_client.api_call("chat.postMessage", channel=channel, text=message, as_user=False)
 
 
 if __name__ == "__main__":
