@@ -5,3 +5,4 @@ conf.py
 .idea
 *.swp
 *.pyc
+**/*.pyc
