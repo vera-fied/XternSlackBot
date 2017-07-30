@@ -2,4 +2,5 @@ rtmbot.conf
 rtmbot.log
 conf.py
 *.env
+.idea
 *.swp

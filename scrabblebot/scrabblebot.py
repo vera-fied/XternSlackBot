@@ -2,13 +2,13 @@ import os
 import time
 import json
 from slackclient import SlackClient
-import scrabble
+from .scrabble import scrabblify
 
 
 def handle_command(command, channel, senduser, ts, slack_client, admin_client, adminid):
     if(command.startswith("scrabblify")):
         inputStr = command[11:]
-        output = scrabble.scrabblify(inputStr, False)
+        output = scrabblify(inputStr, False)
         users = slack_client.api_call('users.list')
         users = users.get("members")
         for user in users:
