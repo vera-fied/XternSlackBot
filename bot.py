@@ -2,8 +2,7 @@ import os
 import time
 import json
 from slackclient import SlackClient
-from scrabble import scrabblify;
-
+from scrabblebot import scrabblebot
 
 BOT_ID = os.environ.get("BOT_ID")
 
@@ -15,22 +14,7 @@ if(adminid):
     admin = SlackClient(adminid)
 
 def handle_command(command, channel, senduser, ts):
-    if(command.startswith("scrabblify")):
-        inputStr = command[11:]
-        output = scrabblify(inputStr, False)
-        users = slack_client.api_call('users.list')
-        users = users.get("members")
-        for user in users:
-            if('id' in user and user.get('id') == senduser):
-                print(user)
-                name = user['name']
-                url = user.get("profile").get('image_original')
-        if(adminid):
-            admin.api_call("chat.delete", channel=channel, ts=ts, as_user=True, token=adminid)
-        else:
-            print("Cannot delete message, not an admin")
-        slack_client.api_call("chat.postMessage", channel=channel, text=output, as_user=False, username=name, icon_url=url)
-        
+    scrabblebot.handle_command(command, channel, senduser, ts, slack_client, admin, adminid)
 
 def parse_slack_output(slack_rtm_output):
     """
@@ -45,7 +29,6 @@ def parse_slack_output(slack_rtm_output):
                 # return text after the @ mention, whitespace removed
                 return (output['text'].split(AT_BOT)[1].strip().lower(), output['channel'], output['user'], output['ts'])
     return None, None
-
 
 if __name__ == "__main__":
     READ_WEBSOCKET_DELAY = 1 # 1 second delay between reading from firehose
