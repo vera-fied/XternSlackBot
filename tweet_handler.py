@@ -2,12 +2,8 @@ import tweepy
 import random
 
 def trump_tweet():
-    with open("twitter_secrets.txt") as f:
+    with open(".env") as f:
         content = f.readlines()
-
-    if len(content) != 4:
-        print("Invalid auth file")
-        return None
 
     consumer_key = (content[0].split("="))[1].strip('\n')
     consumer_secret = (content[1].split("="))[1].strip('\n')

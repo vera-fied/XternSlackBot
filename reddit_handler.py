@@ -1,17 +1,13 @@
 import praw
 
 def get_subreddit_content(subreddit_name, error_msg):
-    with open("reddit_secrets.txt") as f:
+    with open(".env") as f:
         content = f.readlines()
 
-    if len(content) != 4:
-        print("Invalid auth file")
-        return None
-
-    client_id = (content[0].split("="))[1].strip('\n')
-    client_secret = (content[1].split("="))[1].strip('\n')
-    username = (content[2].split("="))[1].strip('\n')
-    password = (content[3].split("="))[1].strip('\n')
+    client_id = (content[4].split("="))[1].strip('\n')
+    client_secret = (content[5].split("="))[1].strip('\n')
+    username = (content[6].split("="))[1].strip('\n')
+    password = (content[7].split("="))[1].strip('\n')
 
     try:
         reddit_inst = praw.Reddit(client_id=client_id,
