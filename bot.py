@@ -4,6 +4,7 @@ from slackclient import SlackClient
 from external_apis import external_api_router
 from scrabblebot import scrabblebot
 from oyapls import oyapls
+from thisguy import thisguy
 
 from dotenv import load_dotenv, find_dotenv
 from heypizza import pizza_bot
@@ -17,6 +18,7 @@ slack_client = SlackClient(os.environ.get('SLACK_API_TOKEN'))
 if admin_id:
     admin = SlackClient(admin_id)
 
+thatguy = os.environ.get('THIS_GUY')
 
 def handle_command(command, channel, send_user, ts):
     result_scrabble = scrabblebot.handle_command(command, channel, send_user, ts, slack_client, admin, admin_id)
@@ -36,6 +38,9 @@ def parse_slack_output(slack_rtm_output):
     if output_list and len(output_list) > 0:
         for output in output_list:
             if output and 'text' in output and 'user' in output:
+                if (thatguyflag and user == thatguy):
+                    if(os.environ.get('ADD_REACTIONS') == "True"):
+                        thisguy.addReactions(slack_client, output['channel'], output['ts'])
                 if AT_BOT in output['text']:
                     # return text after the @ mention, whitespace removed
                     return output['text'].split(AT_BOT)[1].strip().lower(), output['channel'], output['user'], output['ts']
