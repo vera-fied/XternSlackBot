@@ -21,13 +21,20 @@ if admin_id:
 thatguy = os.environ.get('THIS_GUY')
 
 def handle_command(command, channel, send_user, ts):
+    if command == 'help':
+        display_help(command, channel, send_user)
     result_scrabble = scrabblebot.handle_command(command, channel, send_user, ts, slack_client, admin, admin_id)
     result_external = external_api_router.handle_message(command, channel, send_user, slack_client)
     result_pizza = pizza_bot.handle_message(slack_client, command, channel, user=send_user)
     result_oya = oyapls.handle_message(slack_client, command, channel, send_user)
-    if result_scrabble == None and result_external == None and result_pizza == None and result_oya == None:
+    result_thisguy = thisguy.handle_message(slack_client, command, channel, send_user)
+    if(result_scrabble == None and send_user == thatguy and os.environ.get('ADD_REACTIONS') == 'true'):
+        print('adding reactions')
+        thisguy.addReactions(slack_client, channel, ts)
+        print('done adding reactions')
+        return
+    if result_scrabble == None and result_external == None and result_pizza == None and result_oya == None and result_thisguy == None:
         display_help(command, channel, send_user)
-
 def parse_slack_output(slack_rtm_output):
     """
         The Slack Real Time Messaging API is an events firehose.
@@ -38,14 +45,15 @@ def parse_slack_output(slack_rtm_output):
     if output_list and len(output_list) > 0:
         for output in output_list:
             if output and 'text' in output and 'user' in output:
-                if (thatguyflag and user == thatguy):
-                    if(os.environ.get('ADD_REACTIONS') == "True"):
-                        thisguy.addReactions(slack_client, output['channel'], output['ts'])
                 if AT_BOT in output['text']:
                     # return text after the @ mention, whitespace removed
                     return output['text'].split(AT_BOT)[1].strip().lower(), output['channel'], output['user'], output['ts']
                 elif "@" in output['text'] and (":pizza:" in output['text'] or ":oya" in output['text'] or ":nsfw_oya:" in output['text']):
                     return output['text'].strip().lower(), output['channel'], output['user'], output['ts']
+                elif (os.environ.get('ADD_REACTIONS') == 'true' and output['user'] == thatguy):
+                    print("Adding reactions")
+                    thisguy.addReactions(slack_client, output['channel'], output['ts'])
+                    print("Done adding reactions")
     return None, None
 
 def display_help(command, channel, send_user):
