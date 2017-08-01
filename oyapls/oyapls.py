@@ -1,7 +1,10 @@
 from .firebase import db_get, db_set
 from random import randint
-from datetime import date
+import datetime as dt
 from .string_util import get_user, user_from_at
+import os
+
+oyalimit = os.environ.get('OYA_LIMIT')
 
 def handle_message(slack_client, message, channel, user):
     if "oyapls" in message:
@@ -37,7 +40,7 @@ def handle_message(slack_client, message, channel, user):
 
         temp = 0
         if 'nsfw_oya' in vals.keys():
-            temp = vals['nfsw_oya']
+            temp = vals['nsfw_oya']
         response += ", and " + str(temp) + " :nsfw_oya:."
 
         slack_client.api_call('chat.postMessage', channel=channel, text = response, as_user=True)
@@ -90,14 +93,17 @@ def give_oya(oya, user, slack_client, channel):
     oyas_left = None
     if (vals != None and 'daily_oyas' in vals.keys()):
         oyas_left = vals['daily_oyas']
-    last_date = None
-    if (vals != None and 'last_date' in vals.keys()):
-        last_date = vals['last_date']
+    last_day = None
+    if (vals != None and 'last_day' in vals.keys()):
+        last_day = vals['last_day']
+    last_hour = None
+    if (vals != None and 'last_hour' in vals.keys()):
+        last_hour = vals['last_hour']
 
-    if (last_date is None or (date.today() - date.fromordinal(last_date)).days > 0 or oyas_left is None):
-        oyas_left = 3
+    if (last_day is None or last_hour is None or ((dt.date.today().toordinal() - last_day) * 24 + dt.datetime.now().hour - last_hour > 0 or oyas_left is None)):
+        oyas_left = int(oyalimit)
     if oyas_left == 0:
-        slack_client.api_call('chat.postMessage', channel=channel, text = name.title() + " has already gotten 3 oyas today.", as_user=True)
+        slack_client.api_call('chat.postMessage', channel=channel, text = name.title() + " has already gotten 2 oyas this hour.", as_user=True)
         return
 
     if (vals != None and oya in vals.keys()):
@@ -106,7 +112,8 @@ def give_oya(oya, user, slack_client, channel):
         old_oyas = 0
     db_set(user, {
         oya: old_oyas+1,
-        'last_date': date.today().toordinal(),
+        'last_day': dt.date.today().toordinal(),
+        'last_hour': dt.datetime.now().hour,
         'daily_oyas': oyas_left - 1
     })
     slack_client.api_call('chat.postMessage', channel=channel, text = name.title() + " got a :" + oya + ":.", as_user=True)
