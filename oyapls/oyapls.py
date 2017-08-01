@@ -13,7 +13,11 @@ def handle_message(slack_client, message, channel, user):
         return ""
     elif "oyas" in message:
         at_user = message.split(' ')[0]
-        check_user = user_from_at(at_user).upper()
+        check_user = user_from_at(at_user)
+        if check_user == None:
+            return None
+        else:
+            check_user = check_user.upper()
         name = get_user(check_user, slack_client).get('name')
 
         vals = db_get(check_user, None)

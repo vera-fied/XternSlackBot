@@ -6,4 +6,7 @@ def get_user(user_id, slack_client):
     return ""
 
 def user_from_at(user):
-    return user[2:-1]
+    if user[1] == '@':
+        return user[2:-1]
+    else:
+        return None
