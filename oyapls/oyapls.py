@@ -36,9 +36,9 @@ def handle_message(slack_client, message, channel, user):
         response += ", " + str(temp) + " :oya-rainbow-aussie:"
 
         temp = 0
-        if 'nsfw-oya' in vals.keys():
-            temp = vals['nfsw-oya']
-        response += ", and " + str(temp) + " :nsfw-oya:."
+        if 'nsfw_oya' in vals.keys():
+            temp = vals['nfsw_oya']
+        response += ", and " + str(temp) + " :nsfw_oya:."
 
         slack_client.api_call('chat.postMessage', channel=channel, text = response, as_user=True)
         return ""
