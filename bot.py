@@ -41,7 +41,7 @@ def parse_slack_output(slack_rtm_output):
                     return None, None
                 if AT_BOT in output['text']:
                     if randint(0,100) == 42:
-                        slack_client.api_call('chat.postMessage', channel=channel, text = "No, fuck off.", as_user=True)
+                        slack_client.api_call('chat.postMessage', channel=output['channel'], text = "No, fuck off.", as_user=True)
                         return None, None
                     # return text after the @ mention, whitespace removed
                     return output['text'].split(AT_BOT)[1].strip().lower(), output['channel'], output['user'], output['ts']
