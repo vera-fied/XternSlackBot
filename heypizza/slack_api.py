@@ -5,7 +5,8 @@ def send_message(channel, message, slack):
 	slack.api_call(
 		'chat.postMessage',
 		channel=channel,
-		text=message
+		text=message,
+		as_user=True
 	)
 
 

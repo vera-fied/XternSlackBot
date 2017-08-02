@@ -36,6 +36,8 @@ def parse_slack_output(slack_rtm_output):
     if output_list and len(output_list) > 0:
         for output in output_list:
             if output and 'text' in output and 'user' in output:
+                if BOT_ID == output['user']:
+                    return None, None
                 if AT_BOT in output['text']:
                     # return text after the @ mention, whitespace removed
                     return output['text'].split(AT_BOT)[1].strip().lower(), output['channel'], output['user'], output['ts']
@@ -62,7 +64,7 @@ def display_help(command, channel, send_user):
                 "\t!love - get a random scenic picture from one of various subreddits\n" +
                 "```"
                 )
-    slack_client.api_call("chat.postMessage", channel=channel, text=message, as_user=False)
+    slack_client.api_call("chat.postMessage", channel=channel, text=message, as_user=True)
 
 
 if __name__ == "__main__":
