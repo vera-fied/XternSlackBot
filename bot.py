@@ -21,9 +21,9 @@ if admin_id:
 def handle_command(command, channel, send_user, ts):
     result_scrabble = scrabblebot.handle_command(command, channel, send_user, ts, slack_client, admin, admin_id)
     result_external = external_api_router.handle_message(command, channel, send_user, slack_client)
-    result_pizza = pizza_bot.handle_message(slack_client, command, channel, user=send_user)
+#    result_pizza = pizza_bot.handle_message(slack_client, command, channel, user=send_user)
     result_oya = oyapls.handle_message(slack_client, command, channel, send_user)
-    if result_scrabble == None and result_external == None and result_pizza == None and result_oya == None:
+    if result_scrabble == None and result_external == None and result_oya == None:
         display_help(command, channel, send_user)
 
 def parse_slack_output(slack_rtm_output):
@@ -41,16 +41,16 @@ def parse_slack_output(slack_rtm_output):
                 if AT_BOT in output['text']:
                     # return text after the @ mention, whitespace removed
                     return output['text'].split(AT_BOT)[1].strip().lower(), output['channel'], output['user'], output['ts']
-                elif "@" in output['text'] and (":pizza:" in output['text'] or ":oya" in output['text'] or ":nsfw_oya:" in output['text']):
+                elif "@" in output['text'] and (":oya" in output['text'] or ":nsfw_oya:" in output['text']):
                     return output['text'].strip().lower(), output['channel'], output['user'], output['ts']
     return None, None
 
 def display_help(command, channel, send_user):
     message = ("```" + 
-                "PIZZA BOT\n" +
-                "\tTacoBot is back with a new face!\n" 
-                "\t@user_to_gift :pizza: - gives designated user a pizza\n" +
-                "\tleaderboard - displays the users with the highest pizza totals\n" 
+#                "PIZZA BOT\n" +
+#                "\tTacoBot is back with a new face!\n" 
+#                "\t@user_to_gift :pizza: - gives designated user a pizza\n" +
+#                "\tleaderboard - displays the users with the highest pizza totals\n" 
                 "OYA PLS\n" +
                 "\toyapls - gives the user a random oya, up to 3 a day.\n" +
                 "\t@user_to_check oyas - gives info on how many oyas it has.\n"
