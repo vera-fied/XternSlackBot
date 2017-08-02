@@ -26,7 +26,7 @@ def handle_message(slack_client, message, channel, user):
             temp = vals['oya']
         response = name.title() + " has " + str(temp) + " :oya:"
 
-        for x in range(1,11):
+        for x in range(1,12):
             temp = 0
             if ('oya'+str(x)) in vals.keys():
                 temp = vals['oya'+str(x)]
