@@ -27,7 +27,6 @@ def handle_command(command, channel, send_user, ts):
                     display_help(command, channel, send_user)
                 else:
                     slack_client.api_call('chat.postMessage', channel=channel, text = "What?", as_user=True)
-
 def parse_slack_output(slack_rtm_output):
     """
         The Slack Real Time Messaging API is an events firehose.
@@ -38,6 +37,8 @@ def parse_slack_output(slack_rtm_output):
     if output_list and len(output_list) > 0:
         for output in output_list:
             if output and 'text' in output and 'user' in output:
+                if BOT_ID == output['user']:
+                    return None, None
                 if AT_BOT in output['text']:
                     if randint(0,100) == 42:
                         slack_client.api_call('chat.postMessage', channel=channel, text = "No, fuck off.", as_user=True)
@@ -50,7 +51,7 @@ def parse_slack_output(slack_rtm_output):
 
 def display_help(command, channel, send_user):
     message = ("```" + 
-                "OYA PLS\n" +
+               "OYA PLS\n" +
                 "\toyapls - gives the user a random oya, up to 3 a day.\n" +
                 "\t@user_to_check oyas - gives info on how many oyas it has.\n"
                 "\t@user_to_gift #ofOyas :oyatype: ... - gift oyas to another user\n"
@@ -63,7 +64,7 @@ def display_help(command, channel, send_user):
                 "\t!love - get a random scenic picture from one of various subreddits\n" +
                 "```"
                 )
-    slack_client.api_call("chat.postMessage", channel=channel, text=message, as_user=False)
+    slack_client.api_call("chat.postMessage", channel=channel, text=message, as_user=True)
 
 
 if __name__ == "__main__":

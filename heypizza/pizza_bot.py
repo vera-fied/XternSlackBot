@@ -8,25 +8,24 @@ load_dotenv(find_dotenv())
 
 
 def handle_message(slack_client, message, channel, user):
-	__init__(slack_client)
-
 	if 'leaderboard' in message:
-		send_message(channel, leaderboards())
+		send_message(channel, leaderboards(), slack_client)
 		return ""
 
 	if ':pizza:' not in message:
 		return None
 
-	pizzas = parse_message(message)
-	user_name = get_user(user)['name']
+	members = slack_client.api_call('users.list')['members']
+	pizzas = parse_message(message, members)
+	user_name = get_user(user, members)['name']
 
 	if verify_pizzas(pizzas, user_name):
 		save_pizzas(pizzas, user_name)
-		text = make_message(pizzas, user_name)
+		text = make_message(pizzas, user_name, members)
 	else:
 		text = make_error_message(pizzas, user_name)
 
-	send_message(channel, text)
+	send_message(channel, text, slack_client)
 	return ""
 
 

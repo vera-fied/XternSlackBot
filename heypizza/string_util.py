@@ -2,22 +2,22 @@ from .slack_api import convert_to_tag, get_user
 from .firebase import db_get
 
 
-def parse_message(message):
+def parse_message(message, members):
 	return {
 		'numPizzas': message.count(':pizza:'),
-		'users': [get_user(word[2:-1])['name'] for word in message.split(' ') if '@' in word]
+		'users': [get_user(word[2:-1], members)['name'] for word in message.split(' ') if '@' in word]
 	}
 
 
-def make_message(pizzas, user):
+def make_message(pizzas, user, members):
 	val = (
-		convert_to_tag(user) + ' sent ' + str(pizzas['numPizzas']) + ' pizzas to ' +
-		convert_to_tag(pizzas['users'][0])
+		convert_to_tag(user, members) + ' sent ' + str(pizzas['numPizzas']) + ' pizzas to ' +
+		convert_to_tag(pizzas['users'][0], members)
 	)
 	if len(pizzas['users']) > 1:
 		val += (
-			', ' + [convert_to_tag(user) for user in pizzas['users'][1:-1]].join(', ') + ', and ' +
-			convert_to_tag(pizzas['users'][-1])
+			', ' + [convert_to_tag(user, members) for user in pizzas['users'][1:-1]].join(', ') + ', and ' +
+			convert_to_tag(pizzas['users'][-1], members)
 		)
 	return val
 
