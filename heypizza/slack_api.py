@@ -1,14 +1,4 @@
-members = []
-slack = None
-
-
-def __init__(slack_client):
-	global members, slack
-	slack = slack_client
-	members = slack_client.api_call('users.list')['members']
-
-
-def send_message(channel, message):
+def send_message(channel, message, slack):
 	if slack is None:
 		return
 
@@ -19,7 +9,7 @@ def send_message(channel, message):
 	)
 
 
-def get_user(user_id):
+def get_user(user_id, members):
 	for member in members:
 		if member['id'].lower() == user_id.lower():
 			return member
@@ -28,7 +18,7 @@ def get_user(user_id):
 	}
 
 
-def convert_to_tag(username):
+def convert_to_tag(username, members):
 	for member in members:
 		if member['name'] == username:
 			return '<@' + member['id'] + '|' + username + '>'

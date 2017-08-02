@@ -15,7 +15,7 @@ def handle_message(slack_client, message, channel, user):
         at_user = message.split(' ')[0]
         check_user = user_from_at(at_user)
         if check_user == None:
-            return None
+            check_user = user
         else:
             check_user = check_user.upper()
         name = get_user(check_user, slack_client).get('name')
@@ -107,7 +107,7 @@ def give_oya(oya, user, slack_client, channel):
     if (last_day is None or last_hour is None or ((dt.date.today().toordinal() - last_day) * 24 + dt.datetime.now().hour - last_hour > 0 or oyas_left is None)):
         oyas_left = int(oyalimit)
     if oyas_left == 0:
-        slack_client.api_call('chat.postMessage', channel=channel, text = name.title() + " has already gotten 2 oyas this hour.", as_user=True)
+        slack_client.api_call('chat.postMessage', channel=channel, text = name.title() + " has already gotten " + oyalimit + " oyas this hour.", as_user=True)
         return
 
     if (vals != None and oya in vals.keys()):
@@ -123,22 +123,23 @@ def give_oya(oya, user, slack_client, channel):
     slack_client.api_call('chat.postMessage', channel=channel, text = name.title() + " got a :" + oya + ":.", as_user=True)
 
 def random_oya():
-    rand = randint(1,32767)
-    power = 14
-    count = 2 ** power
+    rand = randint(1,120)
+    cur = 15
+    count = 15
     while (rand > count):
-        power-=1
-        count += 2 ** power
-    power = 14 - power
-    if power == 0:
+        cur-=1
+        count += cur
+
+    final = 15 - cur
+    if final == 0:
         return "oya"
-    elif power == 12:
+    elif final == 12:
         return "oya-rainbow"
-    elif power == 13:
+    elif final == 13:
         return "oya-rainbow-aussie"
-    elif power == 14:
+    elif final == 14:
         return "nsfw_oya"
     else:
-        return "oya" + str(power)
+        return "oya" + str(final)
 
 
