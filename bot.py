@@ -18,15 +18,18 @@ slack_client = SlackClient(os.environ.get('SLACK_API_TOKEN'))
 if admin_id:
     admin = SlackClient(admin_id)
 
-
 def handle_command(command, channel, send_user, ts):
-    if scrabblebot.handle_command(command, channel, send_user, ts, slack_client, admin, admin_id) is None:
-        if external_api_router.handle_message(command, channel, send_user, slack_client) is None:
-            if oyapls.handle_message(slack_client, command, channel, send_user) is None:
+    scrabble_result = scrabblebot.handle_command(command, channel, send_user, ts, slack_client, admin, admin_id)
+    if scrabble_result is None:
+        external_result = external_api_router.handle_message(command, channel, send_user, slack_client)
+        if external_result is None:
+            oya_result = oyapls.handle_message(slack_client, command, channel, send_user)
+            if oya_result is None:
                 if command == 'help':
-                    display_help(command, channel, send_user)
+                    display_help(channel)
                 else:
                     slack_client.api_call('chat.postMessage', channel=channel, text = "What?", as_user=True)
+
 def parse_slack_output(slack_rtm_output):
     """
         The Slack Real Time Messaging API is an events firehose.
@@ -49,7 +52,7 @@ def parse_slack_output(slack_rtm_output):
                     return output['text'].strip().lower(), output['channel'], output['user'], output['ts']
     return None, None
 
-def display_help(command, channel, send_user):
+def display_help(channel):
     message = ("```" + 
                "OYA PLS\n" +
                 "\toyapls - gives the user a random oya, up to 3 a day.\n" +

@@ -7,6 +7,7 @@ import os
 oyalimit = os.environ.get('OYA_LIMIT')
 
 def handle_message(slack_client, message, channel, user):
+    print(message)
     if "oyapls" in message:
         if randint(0,100) == 42:
             slack_client.api_call('chat.postMessage', channel=channel, text = "Oh no! :noya:", as_user=True)

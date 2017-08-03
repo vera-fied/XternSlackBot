@@ -13,7 +13,6 @@ def handle_command(command, channel, senduser, ts, slack_client, admin_client, a
         users = users.get("members")
         for user in users:
             if('id' in user and user.get('id') == senduser):
-                print(user)
                 name = user['name']
                 url = user.get("profile").get('image_512')
         if(admin_client):
