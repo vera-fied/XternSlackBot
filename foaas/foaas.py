@@ -19,6 +19,7 @@ def processFoaas(command, channel, user, slack_client, admin, ts):
         for i in json:
             text += i['url'] + "\n"
         slack_client.api_call('chat.postMessage', channel=channel, text = text, as_user=True)
+        return ""
 
     tohit = ""
     for word in pieces:
@@ -46,3 +47,5 @@ def processFoaas(command, channel, user, slack_client, admin, ts):
         slack_client.api_call('chat.postMessage', channel=channel, text = r.text, as_user=True)
     else:
         slack_client.api_call('chat.postMessage', channel=channel, text = "Error retrieving from foaas. Status code: " + r.status_code, as_user=True)
+
+    return ""
