@@ -13,7 +13,7 @@ def handle_command(command, channel, senduser, ts, slack_client, admin_client, a
         users = users.get("members")
         for user in users:
             if('id' in user and user.get('id') == senduser):
-                name = user['name']
+                name = user['real_name']
                 url = user.get("profile").get('image_512')
         if(admin_client):
             admin_client.api_call("chat.delete", channel=channel, ts=ts, as_user=True, token=adminid)
