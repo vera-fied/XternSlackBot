@@ -67,6 +67,9 @@ def display_help(channel):
                 "\toyapls - gives the user a random oya, up to 3 a day.\n" +
                 "\t@user_to_check oyas - gives info on how many oyas it has.\n"
                 "\t@user_to_gift #ofOyas :oyatype: ... - gift oyas to another user\n"
+                "FOAAS\n" +
+                "\tfoaas help - Returns a list of unique foaas requests\n" +
+                "\tfoaas (foaas command) ... - Utilizes the foaas api and fred says the response\n" +
                 "OTHER FEATURES\n" +
                 "\tscrabblify - change text to scrabble tiles\n" +
                 "\t!trump - get Trump's most recent tweet\n" +
