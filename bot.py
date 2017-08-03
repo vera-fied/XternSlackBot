@@ -5,6 +5,7 @@ from external_apis import external_api_router
 from scrabblebot import scrabblebot
 from oyapls import oyapls
 from random import randint
+from foaas import foaas
 
 from dotenv import load_dotenv, find_dotenv
 from heypizza import pizza_bot
@@ -23,12 +24,14 @@ def handle_command(command, channel, send_user, ts):
     if scrabble_result is None:
         external_result = external_api_router.handle_message(command, channel, send_user, slack_client)
         if external_result is None:
-            oya_result = oyapls.handle_message(slack_client, command, channel, send_user)
-            if oya_result is None:
-                if command == 'help':
-                    display_help(channel)
-                else:
-                    slack_client.api_call('chat.postMessage', channel=channel, text = "What?", as_user=True)
+            foaas_result = foaas.handle_command(command, channel, send_user, slack_client, admin, ts)
+            if foaas_result is None:
+                oya_result = oyapls.handle_message(slack_client, command, channel, send_user)
+                if oya_result is None:
+                    if command == 'help':
+                        display_help(channel)
+                    else:
+                        slack_client.api_call('chat.postMessage', channel=channel, text = "What?", as_user=True)
 
 def parse_slack_output(slack_rtm_output):
     """
