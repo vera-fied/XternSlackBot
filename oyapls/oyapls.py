@@ -151,7 +151,7 @@ def random_oya():
     else:
         return "oya" + str(final)
 
-def updateOyaScore(oya, userData):
+def getOyaScore(oya, userData):
     oyaRank = 0;
     if oya == "oya":
         oyaRank = 0
@@ -163,3 +163,31 @@ def updateOyaScore(oya, userData):
         oyaRank = 14
     else:
         oyaRank = int(oya[3])
+
+    base = baseScores[oyaRank]
+    numOya = 0
+    if(userData != None and oya in userData.keys()):
+        numOya = userData[oya]
+
+    return ((numOya//5) * .5 + 1) * base
+
+def calcScore(user, userData):
+    score = 0
+    if(userData is None):
+        print("User has no data")
+        return score
+
+    if("oya" in userData.keys()):
+        score += getOyaScore("oya", userData)
+    if("oya-rainbow" in userData.keys()):
+        score += getOyaScore("oya-rainbow", userData)
+    if("oya-rainbow-aussie" in userData.keys()):
+        score += getOyaScore("oya-rainbow-aussie", userData)
+    if("nsfw_oya" in userData.keys()):
+        score += getOyaScore("nsfw_oya", userData)
+
+    for x in range(1, 12):
+        if(("oya"+str(x)) in userData.keys()):
+            score += getOyaScore("oya"+str(x), userData)
+
+    return score
