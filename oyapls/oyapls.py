@@ -6,11 +6,14 @@ import os
 
 oyalimit = os.environ.get('OYA_LIMIT')
 
+baseScores = [2,4,6,10,14,20,26,34,42,52,62,80,110,250,600]
+
 def handle_message(slack_client, message, channel, user):
     print(message)
     if "oyapls" in message:
         if randint(0,100) == 42:
             slack_client.api_call('chat.postMessage', channel=channel, text = "Oh no! :noya:", as_user=True)
+            return ""
         oya = random_oya()
         give_oya(oya, user, slack_client, channel)
         return ""
@@ -25,7 +28,7 @@ def handle_message(slack_client, message, channel, user):
 
         vals = db_get(check_user, None)
         temp = 0
-        if 'oya' in vals.keys():
+        if vals is not None and 'oya' in vals.keys():
             temp = vals['oya']
         response = name.title() + " has " + str(temp) + " :oya:"
 
@@ -148,4 +151,15 @@ def random_oya():
     else:
         return "oya" + str(final)
 
-
+def updateOyaScore(oya, userData):
+    oyaRank = 0;
+    if oya == "oya":
+        oyaRank = 0
+    elif oya == "oya-rainbow":
+        oyaRank = 12
+    elif oya == "oya-rainbow-aussie":
+        oyaRank = 13
+    elif oya == "nsfw_oya":
+        oyaRank = 14
+    else:
+        oyaRank = int(oya[3])
