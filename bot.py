@@ -19,6 +19,8 @@ slack_client = SlackClient(os.environ.get('SLACK_API_TOKEN'))
 if admin_id:
     admin = SlackClient(admin_id)
 
+team_id = "Not defined yet"
+
 def handle_command(command, channel, send_user, ts):
     scrabble_result = scrabblebot.handle_command(command, channel, send_user, ts, slack_client, admin, admin_id)
     if scrabble_result is None:
@@ -86,6 +88,7 @@ if __name__ == "__main__":
     READ_WEBSOCKET_DELAY = 1  # 1 second delay between reading from firehose
     if slack_client.rtm_connect():
         print("StarterBot connected and running!")
+        team_id = slack_client.api_call("team.info")['team']['id']
         while True:
             read_output = slack_client.rtm_read()
             stuff = parse_slack_output(read_output)

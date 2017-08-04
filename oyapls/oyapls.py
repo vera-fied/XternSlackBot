@@ -95,7 +95,8 @@ def handle_message(slack_client, message, channel, user):
 
 def give_oya(oya, user, slack_client, channel):
     vals = db_get(user, None)
-    name = get_user(user, slack_client).get('name')
+    userData = get_user(user, slack_client)
+    name = userData.get('name')
 
     oyas_left = None
     if (vals != None and 'daily_oyas' in vals.keys()):
@@ -121,7 +122,9 @@ def give_oya(oya, user, slack_client, channel):
         oya: old_oyas+1,
         'last_day': dt.date.today().toordinal(),
         'last_hour': dt.datetime.now().hour,
-        'daily_oyas': oyas_left - 1
+        'daily_oyas': oyas_left - 1,
+        'team': userData.get('team_id'),
+        'username': name
     })
     slack_client.api_call('chat.postMessage', channel=channel, text = name.title() + " got a :" + oya + ":.", as_user=True)
 
